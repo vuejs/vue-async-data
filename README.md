@@ -42,17 +42,22 @@ Vue.component('example', {
 })
 ```
 
-You can also return a promise that resolves to the data to be set:
+You can also return a promise that resolves to the data to be set (plays well with [vue-resource](https://github.com/vuejs/vue-resource)):
 
 ``` js
 Vue.component('example', {
   // ...
   asyncData: function () {
+    var self = this
     return someServiceThatReturnsPromise.get(12345)
       .then(function (msg) {
+        // returning this as the Promise's resolve value
+        // will call `vm.$set('msg', msg)` for you
         return {
           msg: msg
         }
+        // or, set it yourself:
+        // self.msg = msg
       })
   }
 })
