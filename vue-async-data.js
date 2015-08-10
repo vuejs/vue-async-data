@@ -32,9 +32,17 @@ var asyncData = {
   }
 }
 
-module.exports = {
+var api = {
   mixin: asyncData,
   install: function (Vue, options) {
     Vue.options = Vue.util.mergeOptions(Vue.options, asyncData)
   }
+}
+
+if(typeof exports === 'object' && typeof module === 'object') {
+  module.exports = api
+} else if(typeof define === 'function' && define.amd) {
+  define(function () { return api })
+} else if (typeof window !== 'undefined') {
+  window.VueAsyncData = api
 }

@@ -11,18 +11,24 @@ npm install vue-async-data
 ### Usage
 
 ``` js
+// assuming CommonJS
 var Vue = require('vue')
-var asyncData = require('vue-async-data')
+var VueAsyncData = require('vue-async-data')
 
 // use globally
 // you can also just use `asyncData.mixin` where needed
-Vue.use(asyncData)
+Vue.use(VueAsyncData)
 ```
 
 Then, in your component options, provide an `asyncData` function:
 
 ``` js
 Vue.component('example', {
+  data: function {
+    return {
+      msg: 'not loaded yet...'
+    }
+  },
   asyncData: function (resolve, reject) {
     // load data and call resolve(data)
     // or call reject(reason) if something goes wrong
@@ -40,6 +46,7 @@ You can also return a promise that resolves to the data to be set:
 
 ``` js
 Vue.component('example', {
+  // ...
   asyncData: function () {
     return someServiceThatReturnsPromise.get(12345)
       .then(function (msg) {
@@ -55,6 +62,7 @@ Parallel fetching with `Promise.all` and ES6:
 
 ``` js
 Vue.component('example', {
+  // ...
   asyncData() {
     return Promise.all([
       serviceA.get(123),

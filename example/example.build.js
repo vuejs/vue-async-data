@@ -10138,7 +10138,7 @@
 
 /***/ },
 /* 68 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	var asyncData = {
 	  created: function () {
@@ -10174,11 +10174,19 @@
 	  }
 	}
 
-	module.exports = {
+	var api = {
 	  mixin: asyncData,
 	  install: function (Vue, options) {
 	    Vue.options = Vue.util.mergeOptions(Vue.options, asyncData)
 	  }
+	}
+
+	if(true) {
+	  module.exports = api
+	} else if(typeof define === 'function' && define.amd) {
+	  define(function () { return api })
+	} else if (typeof window !== 'undefined') {
+	  window.VueAsyncData = api
 	}
 
 
