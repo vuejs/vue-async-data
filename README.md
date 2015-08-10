@@ -1,6 +1,6 @@
 # vue-async-data
 
-> async data loading plugin for Vue.js
+> Async data loading plugin for Vue.js
 
 ### Install
 
@@ -16,7 +16,7 @@ var Vue = require('vue')
 var VueAsyncData = require('vue-async-data')
 
 // use globally
-// you can also just use `asyncData.mixin` where needed
+// you can also just use `VueAsyncData.mixin` where needed
 Vue.use(VueAsyncData)
 ```
 
