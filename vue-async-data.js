@@ -5,28 +5,36 @@ var asyncData = {
     }
   },
   compiled: function () {
-    var load = this.$options.asyncData
-    if (load) {
-      var self = this
-      var resolve = function (data) {
-        if (data) {
-          for (var key in data) {
-            self.$set(key, data[key])
+    this.reloadAsyncData()
+  },
+  methods: {
+    reloadAsyncData: function () {
+      var load = this.$options.asyncData
+      if (load) {
+        var self = this
+        var resolve = function (data) {
+          if (data) {
+            for (var key in data) {
+              self.$set(key, data[key])
+            }
+          }
+          self.$loadingAsyncData = false
+          self.$emit('async-data')
+        }
+        var reject = function (reason) {
+          var msg = '[vue] async data load failed'
+          if (reason instanceof Error) {
+            console.warn(msg)
+            throw reason
+          } else {
+            console.warn(msg + ': ' + reason)
           }
         }
-        self.$loadingAsyncData = false
-        self.$emit('async-data')
-      }
-      var reject = function (reason) {
-        if (reason instanceof Error) {
-          throw reason
-        } else {
-          console.warn('[vue] async data load failed: ' + reason)
+        this.$loadingAsyncData = true
+        var res = load.call(this, resolve, reject)
+        if (res && typeof res.then === 'function') {
+          res.then(resolve, reject)
         }
-      }
-      var res = load.call(this, resolve, reject)
-      if (res && typeof res.then === 'function') {
-        res.then(resolve, reject)
       }
     }
   }

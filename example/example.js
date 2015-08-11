@@ -6,8 +6,15 @@ Vue.use(asyncData)
 Vue.component('test', {
 
   template:
-    '<div v-if="!$loadingAsyncData">loaded message: {{msg.text}}</div>' +
+    '<div v-if="!$loadingAsyncData">loaded message: {{msg.id}} {{msg.text}}</div>' +
     '<div v-if="$loadingAsyncData">loading...</div>',
+
+  props: ['msgId'],
+
+  // reload data on msgId change
+  watch: {
+    msgId: 'reloadAsyncData'
+  },
 
   data: function () {
     return {
@@ -16,54 +23,28 @@ Vue.component('test', {
   },
 
   asyncData: function (resolve, reject) {
+    var id = this.msgId
     // resolve data asynchronously
     setTimeout(function () {
       resolve({
         msg: {
+          id: id,
           text: 'hihihi'
         }
       })
     }, 1000)
-
-    // OR: return a promise (see examples below)
+    // OR: return a promise (see readme)
   }
 })
 
-new Vue({ el: '#el '})
-
-// --- Promise Examples ---
-
-// mock a service
-var msgService = {
-  get: function (id) {
-    return new Promise(function (resolve, reject) {
-      setTimeout(function () {
-        resolve({
-          text: 'hihihi from ' + id
-        })
-      }, 1000)
-    })
+var app = new Vue({
+  el: '#el',
+  data: {
+    msgId: 123
+  },
+  methods: {
+    reload: function () {
+      this.msgId = Math.floor(Math.random() * 10000)
+    }
   }
-}
-
-// in your asyncData function:
-function asyncData () {
-  return msgService.get(1).then(function (msg) {
-    return {
-      msg: msg
-    }
-  })
-}
-
-// parallel data fetching with multiple requests:
-function asyncDataParallel () {
-  return Promise.all([
-    msgService.get(1),
-    msgService.get(2)
-  ]).then(function (msgs) {
-    return {
-      a: msgs[0],
-      b: msgs[1]
-    }
-  })
-}
+})

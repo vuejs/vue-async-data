@@ -42,6 +42,8 @@ Vue.component('example', {
 })
 ```
 
+#### Promise
+
 You can also return a promise that resolves to the data to be set (plays well with [vue-resource](https://github.com/vuejs/vue-resource)):
 
 ``` js
@@ -76,6 +78,25 @@ Vue.component('example', {
   }
 })
 ```
+
+#### Reloading Data
+
+The component also gets a method named `reloadAsyncData`, which obviously reloads the data:
+
+``` js
+Vue.component('example', {
+  // ...
+  asyncData() {
+    // load data based on `this.params`
+  },
+  // reload when params change
+  watch: {
+    params: 'reloadAsyncData'
+  }
+})
+```
+
+#### Loading State
 
 Your component automatically gets a `$loadingAsyncData` meta property, which allows you to display a loading state before the data is loaded:
 

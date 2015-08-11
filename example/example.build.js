@@ -52,8 +52,15 @@
 	Vue.component('test', {
 
 	  template:
-	    '<div v-if="!$loadingAsyncData">loaded message: {{msg.text}}</div>' +
+	    '<div v-if="!$loadingAsyncData">loaded message: {{msg.id}} {{msg.text}}</div>' +
 	    '<div v-if="$loadingAsyncData">loading...</div>',
+
+	  props: ['msgId'],
+
+	  // reload data on msgId change
+	  watch: {
+	    msgId: 'reloadAsyncData'
+	  },
 
 	  data: function () {
 	    return {
@@ -62,57 +69,31 @@
 	  },
 
 	  asyncData: function (resolve, reject) {
+	    var id = this.msgId
 	    // resolve data asynchronously
 	    setTimeout(function () {
 	      resolve({
 	        msg: {
+	          id: id,
 	          text: 'hihihi'
 	        }
 	      })
 	    }, 1000)
-
-	    // OR: return a promise (see examples below)
+	    // OR: return a promise (see readme)
 	  }
 	})
 
-	new Vue({ el: '#el '})
-
-	// --- Promise Examples ---
-
-	// mock a service
-	var msgService = {
-	  get: function (id) {
-	    return new Promise(function (resolve, reject) {
-	      setTimeout(function () {
-	        resolve({
-	          text: 'hihihi from ' + id
-	        })
-	      }, 1000)
-	    })
+	var app = new Vue({
+	  el: '#el',
+	  data: {
+	    msgId: 123
+	  },
+	  methods: {
+	    reload: function () {
+	      this.msgId = Math.floor(Math.random() * 10000)
+	    }
 	  }
-	}
-
-	// in your asyncData function:
-	function asyncData () {
-	  return msgService.get(1).then(function (msg) {
-	    return {
-	      msg: msg
-	    }
-	  })
-	}
-
-	// parallel data fetching with multiple requests:
-	function asyncDataParallel () {
-	  return Promise.all([
-	    msgService.get(1),
-	    msgService.get(2)
-	  ]).then(function (msgs) {
-	    return {
-	      a: msgs[0],
-	      b: msgs[1]
-	    }
-	  })
-	}
+	})
 
 
 /***/ },
@@ -10147,28 +10128,36 @@
 	    }
 	  },
 	  compiled: function () {
-	    var load = this.$options.asyncData
-	    if (load) {
-	      var self = this
-	      var resolve = function (data) {
-	        if (data) {
-	          for (var key in data) {
-	            self.$set(key, data[key])
+	    this.reloadAsyncData()
+	  },
+	  methods: {
+	    reloadAsyncData: function () {
+	      var load = this.$options.asyncData
+	      if (load) {
+	        var self = this
+	        var resolve = function (data) {
+	          if (data) {
+	            for (var key in data) {
+	              self.$set(key, data[key])
+	            }
+	          }
+	          self.$loadingAsyncData = false
+	          self.$emit('async-data')
+	        }
+	        var reject = function (reason) {
+	          var msg = '[vue] async data load failed'
+	          if (reason instanceof Error) {
+	            console.warn(msg)
+	            throw reason
+	          } else {
+	            console.warn(msg + ': ' + reason)
 	          }
 	        }
-	        self.$loadingAsyncData = false
-	        self.$emit('async-data')
-	      }
-	      var reject = function (reason) {
-	        if (reason instanceof Error) {
-	          throw reason
-	        } else {
-	          console.warn('[vue] async data load failed: ' + reason)
+	        this.$loadingAsyncData = true
+	        var res = load.call(this, resolve, reject)
+	        if (res && typeof res.then === 'function') {
+	          res.then(resolve, reject)
 	        }
-	      }
-	      var res = load.call(this, resolve, reject)
-	      if (res && typeof res.then === 'function') {
-	        res.then(resolve, reject)
 	      }
 	    }
 	  }
