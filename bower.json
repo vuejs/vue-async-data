@@ -1,0 +1,20 @@
+{
+  "name": "vue-async-data",
+  "description": "async data loading plugin for Vue.js",
+  "main": "vue-async-data.js",
+  "authors": [
+    "Evan"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "vue"
+  ],
+  "homepage": "https://github.com/vuejs/vue-async-data",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
