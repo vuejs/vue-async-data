@@ -2,6 +2,8 @@
 
 > Async data loading plugin for Vue.js
 
+**NOTE:** you don't need this if you are using [vue-router](https://github.com/vuejs/vue-router). Use vue-router's [`route.data` hook](http://router.vuejs.org/en/pipeline/data.html) instead.
+
 ### Install
 
 ``` bash
