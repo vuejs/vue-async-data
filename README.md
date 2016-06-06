@@ -112,3 +112,7 @@ Or, if you prefer to wait until data loaded to display the component, you can us
 ``` html
 <example wait-for="async-data"></example>
 ```
+
+### License
+
+[MIT](http://opensource.org/licenses/MIT)
