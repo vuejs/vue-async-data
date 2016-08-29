@@ -1,6 +1,6 @@
 {
   "name": "vue-async-data",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "async data loading plugin for Vue.js",
   "main": "vue-async-data.js",
   "repository": {
