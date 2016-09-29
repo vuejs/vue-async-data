@@ -4,7 +4,7 @@
 
 **NOTE:**
 
-- Does not work with Vue 2.0 yet.
+- Does not work with Vue 2.0.
 
 - You don't need this if you are using [vue-router](https://github.com/vuejs/vue-router). Use vue-router's [`route.data` hook](http://router.vuejs.org/en/pipeline/data.html) instead.
 
