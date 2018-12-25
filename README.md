@@ -1,4 +1,6 @@
-# vue-async-data
+# THIS REPOSITORY IS DEPRECATED
+
+## vue-async-data
 
 > Async data loading plugin for Vue.js
 
