@@ -18,7 +18,10 @@
       }
     },
     compiled: function () {
-      this.reloadAsyncData()
+      if(!this.__loadingAsyncData){
+        this.__loadingAsyncData = true;
+        this.reloadAsyncData()
+      }
     },
     methods: {
       reloadAsyncData: function () {
