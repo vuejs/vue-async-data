@@ -28,7 +28,7 @@
           var resolve = function (data) {
             if (data) {
               for (var key in data) {
-                self.$set(key, data[key])
+                self.$set(self, key, data[key])
               }
             }
             self.$loadingAsyncData = false
